@@ -21,10 +21,11 @@ w.keypad(1) # setting the program to accept keypad input
 w.timeout(100) # refresh the screen every 100 milliseconds
 
 # creating snake's initial position
-snk_x = int(sw/4)
-snk_y = int(sh/2)
-## creating snake's body
-snake = [ [snk_y, snk_x], [snk_y, snk_x-1], [snk_y, snk_x-2] ]
+snake_x = int(sw/4)
+snake_y = int(sh/2)
+
+# creating snake's body as 3 blocks of screen pixel
+snake = [ [snake_y, snake_x], [snake_y, snake_x-1], [snake_y, snake_x-2] ]
 
 # create the food
 food = [int(sh/2), int(sw/2)] # food located at center of the screen
@@ -45,14 +46,14 @@ while True:
 
     # determine location of new head of the snake based on user key input
     new_head = [snake[0][0], snake[0][1]]
-    if key == curses.KEY_DOWN:
-        new_head[0] += 1
-    if key == curses.KEY_UP:
-        new_head[0] -= 1
     if key == curses.KEY_LEFT:
         new_head[1] -= 1
     if key == curses.KEY_RIGHT:
         new_head[1] += 1
+    if key == curses.KEY_DOWN:
+        new_head[0] += 1
+    if key == curses.KEY_UP:
+        new_head[0] -= 1
 
     # insert new head of the snake
     snake.insert(0, new_head)
@@ -71,5 +72,5 @@ while True:
         tail = snake.pop()
         w.addch(int(tail[0]), int(tail[1]), ' ') # add a space character where the tail originally was
 
-    # add the head of the snake
+    # add head of the snake
     w.addch(int(snake[0][0]), int(snake[0][1]), curses.ACS_CKBOARD)
