@@ -21,8 +21,8 @@ w.keypad(1) # setting the program to accept keypad input
 w.timeout(100) # refresh the screen every 100 milliseconds
 
 # creating snake's initial position
-snk_x = sw/4
-snk_y = sh/2
+snk_x = int(sw/4)
+snk_y = int(sh/2)
 ## creating snake's body
 snake = [ [snk_y, snk_x], [snk_y, snk_x-1], [snk_y, snk_x-2] ]
 
