@@ -27,7 +27,7 @@ snk_y = sh/2
 snake = [ [snk_y, snk_x], [snk_y, snk_x-1], [snk_y, snk_x-2] ]
 
 # create the food
-food = [sh/2, sw/2] # food located at center of the screen
+food = [int(sh/2), int(sw/2)] # food located at center of the screen
 w.addch(food[0], food[1], curses.ACS_PI) # add the food to the screen using add character function
 
 # initial direction of motion of snake
@@ -35,4 +35,41 @@ key = curses.KEY_RIGHT
 
 # Track the movement of the snake
 while True:
-    next
+    next_key = w.getch()
+    key = key if next_key == -1 else next_key
+
+    # end of the game "condition"
+    if snake[0][0] in [0, sh] or snake[0][1] in [0, sw] or snake[0] in snake[1:]:
+        curses.endwin()
+        quit()
+
+    # determine location of new head of the snake based on user key input
+    new_head = [snake[0][0], snake[0][1]]
+    if key == curses.KEY_DOWN:
+        new_head[0] += 1
+    if key == curses.KEY_UP:
+        new_head[0] -= 1
+    if key == curses.KEY_LEFT:
+        new_head[1] -= 1
+    if key == curses.KEY_RIGHT:
+        new_head[1] += 1
+
+    # insert new head of the snake
+    snake.insert(0, new_head)
+
+    # determine if snake has eaten the food
+    if snake[0] == food:
+        food = None # remove the current location of food
+        while food is None: # add new food location randomnly
+            nf = [ 
+                random.randint(1, sh-1), 
+                random.randint(1, sw-1) 
+            ]
+            food = nf if nf not in snake else None
+        w.addch(food[0], food[1], curses.ACS_PI) # add the food at its new location
+    else:
+        tail = snake.pop()
+        w.addch(int(tail[0]), int(tail[1]), ' ') # add a space character where the tail originally was
+
+    # add the head of the snake
+    w.addch(int(snake[0][0]), int(snake[0][1]), curses.ACS_CKBOARD)
